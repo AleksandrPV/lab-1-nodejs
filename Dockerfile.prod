@@ -1,0 +1,33 @@
+# Этап сборки
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Копируем файлы package.json и package-lock.json
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm ci
+
+# Копируем исходный код
+COPY . .
+
+# Этап продакшена
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Копируем только необходимые файлы из этапа сборки
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/index.js ./
+
+# Создаем непривилегированного пользователя
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+# Открываем порт
+EXPOSE 3000
+
+# Запускаем приложение
+CMD ["node", "index.js"] 
