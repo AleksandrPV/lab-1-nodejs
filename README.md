@@ -53,6 +53,13 @@ docker-compose up --build
 docker-compose -f docker-compose.prod.yml up --build
 ```
 
+### Деплой на сервер
+
+1. SSH NodeJs-server
+2. cd /var/www/lab-1-nodejs
+3. git pull origin main
+4. docker-compose -f docker-compose.prod.yml up --build -d
+
 ## API Endpoints
 
 - `GET /api/users` - Получить список всех пользователей
