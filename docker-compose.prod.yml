@@ -10,9 +10,32 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/nodejs
     restart: unless-stopped
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
     healthcheck:
       test: ["CMD", "wget", "--spider", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
-      retries: 3 
+      retries: 3
+
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb-prod
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data: 
