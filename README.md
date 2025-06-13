@@ -60,6 +60,8 @@ docker-compose -f docker-compose.prod.yml up --build
 3. git pull origin main
 4. docker-compose -f docker-compose.prod.yml up --build -d
 
+
+
 ## API Endpoints
 
 - `GET /api/users` - Получить список всех пользователей
